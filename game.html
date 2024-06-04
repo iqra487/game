@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-fluid d-flex justify-content-center">
+        <div class="row wrapper">
+            <div class="col-12 text-center">
+                <h1>Guess The Number!</h1>
+                <button class="btn btn-danger" onclick="reStartGame()" >Start New Game</button>
+            </div>
+            <div class="col-12 game-container">
+                <h3 class="text-center">Enter your best guess...</h3>
+                <div class="input-group mb-3">
+                    <input type="text" id="user-input" autocomplete="off" type="number" style="width: 50%; margin-left: 20%; height: 50px; border-radius: 10px; padding: 10px;" placeholder="Between 1 to 100" aria-label="Enter Number" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn" style="border: 2px solid white; border-radius: 5px; color: yellow; border-radius: 10px; margin-left: 5px;"  type="button" id="button-addon2" onclick="giveHint()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lightbulb-fill" viewBox="0 0 16 16">
+                                <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5"/>
+                              </svg>
+                            </button>
+                    </div>
+                </div>
+                <button class="btn btn-danger" style=" margin-left: 40%;" type="button" onclick="submitGame()">Submit</button>
+            </div>
+            <div class="col-12 text-center">
+                <h2 id="no-of-tries"></h2>
+                <h2 id="result">Result</h2>
+                <p id="hint" style="color: yellow;"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // declaring values;
+        
+       let random = Math.floor(Math.random() * 100);
+       let tries = 5;
+    //    console.log(random);
+        // added a new hint feature that will tell whether the number is even or odd
+       function giveHint(){
+        if(random%2 == 0){
+            document.getElementById("hint").innerHTML = "Hint: Try an Even number";
+        }else if(random%2 != 0){
+            document.getElementById("hint").innerHTML = "Hint: Try an Odd number";
+        }
+       }
+       // for when the player wants to play again the game will go back to the default settings
+       //I was not sure if I should only declare variables once or twice for this purpose like one in the reStartGame and the other one 
+       // in the beginning    
+       function reStartGame() {
+            random = Math.floor(Math.random() * 100) + 1;
+            tries = 5;
+            
+            $(document).ready(function(){
+                $("#no-of-tries").text( "No of tries: " + tries);
+                $("#result").text("Result");
+                $("#user-input").text("");
+                $("#hint").text("");
+
+            })
+
+            // console.log(random);
+        }
+    //    everytime the submit button is pressed the following code run
+       function submitGame(){
+            // everytime the submit button is pressed it will take a new user input
+            let userInput = parseInt(document.getElementById("user-input").value);
+            // // this if else is used to make sure the input values and not null or empty and tries are not 0          
+            if (!isNaN(userInput) && userInput !== null && userInput !== "") {
+
+                //before tries are decremented; 
+                // the following condition needs to be checked first or else it wont accept the right guess on the last try
+                if (userInput === random) {
+                        document.getElementById("result").innerHTML = "You guessed the correct number!";
+                    } else{
+                        tries --;
+                        if (tries >= 1) {
+                            if (userInput > random) {
+                                document.getElementById("result").innerHTML = "Try a lesser number";
+                            } else {
+                                document.getElementById("result").innerHTML = "Try a greater number";
+                            }
+                        document.getElementById("no-of-tries").innerHTML = "No of tries: " + tries;
+                        } else {
+                            document.getElementById("no-of-tries").innerHTML = "No tries left";
+                            document.getElementById("result").innerHTML = "You lost. The correct number was " + random;
+                        }
+                        }
+                        // to emply the user input field after the submit button is pressed
+                
+                        document.getElementById("user-input").value = "";
+                    } else {
+                    alert("Please enter a valid number.");
+                }
+            }
+        
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+</body>
+</html>
